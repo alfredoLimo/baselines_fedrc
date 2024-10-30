@@ -28,7 +28,7 @@ def parse_args(args_list=None):
 
     # TODO add new datasets
     parser.add_argument(
-        'experiment',
+        '--experiment',
         help='name of experiment',
         type=str,
         default='MNIST'
@@ -36,7 +36,7 @@ def parse_args(args_list=None):
 
     # TODO check baselines we use
     parser.add_argument(
-        'method',
+        '--method',
         help='the method to be used;'
              ' possible are `FedAvg`, `FedEM`, `local`, `FedProx`, `L2SGD`,'
              ' `pFedMe`, `AFL`, `FFL` and `clustered`;',

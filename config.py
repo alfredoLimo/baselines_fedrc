@@ -8,7 +8,7 @@ K_model = 4
 
 
 # Dataset settings
-dataset_name = "MNIST" # ["CIFAR10", "CIFAR100", "MNIST", "FMNIST", "EMNIST"]
+dataset_name = "cifar10-c" # ["CIFAR10", "CIFAR100", "MNIST", "FMNIST", "EMNIST"]
 drifting_type = 'static' # ['static', 'trND_teDR', 'trDA_teDR', 'trDA_teND', 'trDR_teDR', 'trDR_teND'] refer to ANDA page for more details
 non_iid_type = 'label_condition_skew' # refer to ANDA page for more details
 verbose = True
@@ -53,29 +53,29 @@ momentum = 0.9
 
 
 # self-defined settings
-n_classes_dict = {
-    "CIFAR10": 10,
-    "CIFAR100": 100,
-    "MNIST": 10,
-    "FMNIST": 10
-}
-n_classes = n_classes_dict[dataset_name]
+# n_classes_dict = {
+#     "CIFAR10": 10,
+#     "CIFAR100": 100,
+#     "MNIST": 10,
+#     "FMNIST": 10
+# }
+# n_classes = n_classes_dict[dataset_name]
 
-input_size_dict = {
-    "CIFAR10": (32, 32),
-    "CIFAR100": (32, 32),
-    "MNIST": (28, 28),
-    "FMNIST": (28, 28)
-}
-input_size = input_size_dict[dataset_name]
+# input_size_dict = {
+#     "CIFAR10": (32, 32),
+#     "CIFAR100": (32, 32),
+#     "MNIST": (28, 28),
+#     "FMNIST": (28, 28)
+# }
+# input_size = input_size_dict[dataset_name]
 
-acceptable_accuracy = {
-    "CIFAR10": 0.5,
-    "CIFAR100": 0.1,
-    "MNIST": 0.8,
-    "FMNIST": 0.8
-}
-th_accuracy = acceptable_accuracy[dataset_name]
+# acceptable_accuracy = {
+#     "CIFAR10": 0.5,
+#     "CIFAR100": 0.1,
+#     "MNIST": 0.8,
+#     "FMNIST": 0.8
+# }
+# th_accuracy = acceptable_accuracy[dataset_name]
 training_drifting = False if drifting_type in ['static', 'trND_teDR'] else True # to be identified
 default_path = f"{random_seed}/{model_name}/{dataset_name}/{drifting_type}"
 

@@ -480,6 +480,8 @@ if __name__ == "__main__":
     args.local_steps = config.local_epochs
     args.device = config.gpu
     args.lr = config.lr
-    args.seed = config.seed
+    args.seed = config.random_seed
+    if config.gpu == 0:
+        args.device = torch.device("cuda:1")
 
     run_experiment(args)
