@@ -39,10 +39,10 @@ LOADER_TYPE = {
     'powersupply': 'powersupply',
     'elec': 'elec',
     # new
-    'mnist': 'mnist',
-    'cifar10': 'cifar10',
-    'fmnist': 'fmnist',
-    'cifar100': 'cifar100'
+    'MNIST': 'MNIST',
+    'FMNIST': 'FMNIST',
+    'CIFAR10': 'CIFAR10',
+    'CIFAR100': 'CIFAR100'
 }
 
 EXTENSIONS = {
@@ -150,10 +150,10 @@ CLASS_NUMBER = {
     'powersupply': 2,
     'elec': 2,
     # new
-    'mnist': 10,
-    'cifar10': 10,
-    'cifar100': 100,
-    'fmnist': 10
+    'MNIST': 10,
+    'CIFAR10': 10,
+    'CIFAR100': 100,
+    'FMNIST': 10
 }
 
 CHARACTERS_WEIGHTS = {

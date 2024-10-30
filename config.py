@@ -1,14 +1,13 @@
 # Overall settings
 k_folds = 2 # number of folds for cross-validation, if 1, no cross-validation
-strategy = 'fedrc' # ['fedrc','FedEM','FeSEM']
+strategy = 'fedrc'  # ['fedrc','FedEM','FeSEM']
 random_seed = 42
-gpu = 0 # TODO
-n_clients = 10
-K_model = 4
+n_clients = 10      # TODO
+K_model = 4         # TODO
 
 
 # Dataset settings
-dataset_name = "cifar10-c" # ["CIFAR10", "CIFAR100", "MNIST", "FMNIST", "EMNIST"]
+dataset_name = "cifar10-c" # TODO # ["CIFAR10", "CIFAR100", "MNIST", "FMNIST", "EMNIST"]
 drifting_type = 'static' # ['static', 'trND_teDR', 'trDA_teDR', 'trDA_teND', 'trDR_teDR', 'trDR_teND'] refer to ANDA page for more details
 non_iid_type = 'label_condition_skew' # refer to ANDA page for more details
 verbose = True
@@ -30,19 +29,8 @@ args = {
     # 'random_mode':2,
 }
 
-args = {
-    'set_rotation': True,
-    'set_color': True,
-    'rotations':4,
-    'colors':1,
-    'random_mode':True,
-    'rotated_label_number':3,
-    'colored_label_number':3,
-} 
-
-
 # Training model settings
-model_name = "LeNet5"   # ["LeNet5", "ResNet9"]
+model_name = "LeNet5"  # DEFAULT LeNet5 # ["LeNet5", "ResNet9"]
 batch_size = 64
 test_batch_size = 64
 client_eval_ratio = 0.2

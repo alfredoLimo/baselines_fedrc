@@ -144,27 +144,36 @@ def init_clients(args_, root_path, logs_dir):
                     is_validation=args_.validation
                 )
     # new
-    elif LOADER_TYPE[args_.experiment] == 'mnist':
-        pass
-
-    elif LOADER_TYPE[args_.experiment] == 'cifar10':
-        pass
-
-    elif LOADER_TYPE[args_.experiment] == 'fmnist':
-        pass
-
-    elif LOADER_TYPE[args_.experiment] == 'cifar100':
-        pass
-
     else:
-        train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-            get_loaders(
-                type_=LOADER_TYPE[args_.experiment],
-                root_path=root_path,
-                batch_size=args_.bz,
-                is_validation=args_.validation
-            )
-        client_types = [0] * len(train_iterators)
+        pass
+    # elif LOADER_TYPE[args_.experiment] == 'MNIST':
+    #     pass
+
+    # elif LOADER_TYPE[args_.experiment] == 'CIFAR10':
+    #     pass
+
+    # elif LOADER_TYPE[args_.experiment] == 'FMNIST':
+    #     pass
+
+    # elif LOADER_TYPE[args_.experiment] == 'CIFAR100':
+    #     pass
+
+    # else:
+    #     train_iterators, val_iterators, test_iterators, client_types, feature_types =\
+    #         get_loaders(
+    #             type_=LOADER_TYPE[args_.experiment],
+    #             root_path=root_path,
+    #             batch_size=args_.bz,
+    #             is_validation=args_.validation
+    #         )
+    #     client_types = [0] * len(train_iterators)
+
+
+    # return all datasets
+
+
+
+
 
     print("===> Initializing clients..")
     clients_ = []
@@ -271,9 +280,11 @@ def run_experiment(args_):
     print("==> Clients initialization..")
     clients = init_clients(args_, root_path=os.path.join(data_dir, "train"), logs_dir=os.path.join(logs_dir, "train"))
 
-    print("==> Test Clients initialization..")
-    test_clients = init_clients(args_, root_path=os.path.join(data_dir, "test"),
-                                logs_dir=os.path.join(logs_dir, "test"))
+    # No test clients
+    # print("==> Test Clients initialization..")
+    # test_clients = init_clients(args_, root_path=os.path.join(data_dir, "test"),
+    #                             logs_dir=os.path.join(logs_dir, "test"))
+    test_clients = []
 
     # return
 
@@ -478,7 +489,7 @@ if __name__ == "__main__":
     args.n_rounds = config.n_rounds
     args.bz = config.batch_size
     args.local_steps = config.local_epochs
-    args.device = config.gpu
+    args.device = torch.device("cpu")
     args.lr = config.lr
     args.seed = config.random_seed
     
@@ -486,8 +497,6 @@ if __name__ == "__main__":
         args.device = torch.device("mps")
     elif torch.cuda.is_available():
         args.device = torch.device("cuda")
-    else:
-        args.device = torch.device("cpu")
 
     print(f"USING DEVICE: {args.device}")
 
