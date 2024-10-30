@@ -481,7 +481,14 @@ if __name__ == "__main__":
     args.device = config.gpu
     args.lr = config.lr
     args.seed = config.random_seed
-    if config.gpu == 0:
-        args.device = torch.device("cuda:1")
+    
+    if torch.backends.mps.is_available() and torch.backends.mps.is_built():
+        args.device = torch.device("mps")
+    elif torch.cuda.is_available():
+        args.device = torch.device("cuda")
+    else:
+        args.device = torch.device("cpu")
+
+    print(f"USING DEVICE: {args.device}")
 
     run_experiment(args)
