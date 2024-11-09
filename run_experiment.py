@@ -13,6 +13,7 @@ from sklearn import cluster
 from utils.utils import *
 from utils.constants import *
 from utils.args import *
+from anda_dataloader import get_ANDA_loaders
 
 from torch.utils.tensorboard import SummaryWriter
 
@@ -28,164 +29,82 @@ def init_clients(args_, root_path, logs_dir):
     """
     print("===> Building data iterators..")
     class_number = CLASS_NUMBER[LOADER_TYPE[args_.experiment]]
-    if LOADER_TYPE[args_.experiment] == 'cifar10-c':
-        if 'test' in root_path:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_cifar10C_loaders(
-                    root_path='./data/cifar10-c',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation,
-                    test = True,
-                    test_num = 3
-                )
-        else:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_cifar10C_loaders(
-                    root_path='./data/cifar10-c',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation
-                )
-    elif LOADER_TYPE[args_.experiment] == 'tiny-imagenet-c':
-        if 'test' in root_path:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_imagenetC_loaders(
-                    root_path='./data/tiny-imagenet-c',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation,
-                    test = True,
-                    test_num = 3
-                )
-        else:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_cifar10C_loaders(
-                    root_path='./data/tiny-imagenet-c',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation
-                )
-    elif LOADER_TYPE[args_.experiment] == 'cifar100-c':
-        if 'test' in root_path:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_cifar10C_loaders(
-                    root_path='./data/cifar100-c',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation,
-                    test = True,
-                    test_num = 1
-                )
-        else:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_cifar10C_loaders(
-                    root_path='./data/cifar100-c',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation
-                )
-    elif LOADER_TYPE[args_.experiment] == 'fmnist-c':
-        if 'test' in root_path:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_fmnistC_loaders(
-                    root_path='./data/fmnist-c',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation,
-                    test = True
-                )
-        else:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_fmnistC_loaders(
-                    root_path='./data/fmnist-c',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation
-                )
-    elif LOADER_TYPE[args_.experiment] == 'airline':
-        if 'test' in root_path:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_airline_loaders(
-                    root_path='./data/airline/all_data',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation,
-                    test = True
-                )
-        else:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_airline_loaders(
-                    root_path='./data/airline/all_data',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation
-                )
-    elif LOADER_TYPE[args_.experiment] == 'elec':
-        if 'test' in root_path:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_airline_loaders(
-                    root_path='./data/elec/all_data',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation,
-                    test = True
-                )
-        else:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_airline_loaders(
-                    root_path='./data/elec/all_data',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation
-                )
-    elif LOADER_TYPE[args_.experiment] == 'powersupply':
-        if 'test' in root_path:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_airline_loaders(
-                    root_path='./data/powersupply/all_data',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation,
-                    test = True
-                )
-        else:
-            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-                get_airline_loaders(
-                    root_path='./data/powersupply/all_data',
-                    batch_size=args_.bz,
-                    is_validation=args_.validation
-                )
+            
     # new
+    if config.dataset_name in ['MNIST', 'FMNIST', 'CIFAR10', 'CIFAR100']:
+        train_iterators, val_iterators, test_iterators, client_types, feature_types =\
+            get_ANDA_loaders()
+
+    elif LOADER_TYPE[args_.experiment] == 'cifar10-c':
+        if 'test' in root_path:
+            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
+                get_cifar10C_loaders(
+                    root_path='./data/cifar10-c',
+                    batch_size=args_.bz,
+                    is_validation=args_.validation,
+                    test = True,
+                    test_num = 3
+                )
+        else:
+            train_iterators, val_iterators, test_iterators, client_types, feature_types =\
+                get_cifar10C_loaders(
+                    root_path='./data/cifar10-c',
+                    batch_size=args_.bz,
+                    is_validation=args_.validation
+                )
+
     else:
-        pass
-    # elif LOADER_TYPE[args_.experiment] == 'MNIST':
-    #     pass
-
-    # elif LOADER_TYPE[args_.experiment] == 'CIFAR10':
-    #     pass
-
-    # elif LOADER_TYPE[args_.experiment] == 'FMNIST':
-    #     pass
-
-    # elif LOADER_TYPE[args_.experiment] == 'CIFAR100':
-    #     pass
-
-    # else:
-    #     train_iterators, val_iterators, test_iterators, client_types, feature_types =\
-    #         get_loaders(
-    #             type_=LOADER_TYPE[args_.experiment],
-    #             root_path=root_path,
-    #             batch_size=args_.bz,
-    #             is_validation=args_.validation
-    #         )
-    #     client_types = [0] * len(train_iterators)
-
+        raise ValueError("Unknown dataset: {}".format(args_.experiment))
 
     # return all datasets
-
-
-
-
 
     print("===> Initializing clients..")
     clients_ = []
     for task_id, (train_iterator, val_iterator, test_iterator) in \
             enumerate(tqdm(zip(train_iterators, val_iterators, test_iterators), total=len(train_iterators))):
 
+        # if task_id == 0:
+        if False:
+            print(len(train_iterator.dataset))
+            print(len(val_iterator.dataset))
+            # Inspect train_iterator
+            train_batch = next(iter(train_iterator))
+            if isinstance(train_batch, (list, tuple)):
+                if len(train_batch) == 2:
+                    train_inputs, train_targets = train_batch
+                elif len(train_batch) == 3:
+                    train_inputs, train_targets, _ = train_batch
+                else:
+                    print("Unexpected train batch structure:", train_batch)
+            print(f"Task {task_id} (Train): Inputs shape: {train_inputs.shape}, Targets shape: {train_targets.shape}")
+
+            # Inspect val_iterator
+            val_batch = next(iter(val_iterator))
+            if isinstance(val_batch, (list, tuple)):
+                if len(val_batch) == 2:
+                    val_inputs, val_targets = val_batch
+                elif len(val_batch) == 3:
+                    val_inputs, val_targets, _ = val_batch
+                else:
+                    print("Unexpected val batch structure:", val_batch)
+            print(f"Task {task_id} (Validation): Inputs shape: {val_inputs.shape}, Targets shape: {val_targets.shape}")
+
+            # Inspect test_iterator
+            test_batch = next(iter(test_iterator))
+            if isinstance(test_batch, (list, tuple)):
+                if len(test_batch) == 2:
+                    test_inputs, test_targets = test_batch
+                elif len(test_batch) == 3:
+                    test_inputs, test_targets, _ = test_batch
+                else:
+                    print("Unexpected test batch structure:", test_batch)
+            print(f"Task {task_id} (Test): Inputs shape: {test_inputs.shape}, Targets shape: {test_targets.shape}")
+
         if train_iterator is None or test_iterator is None:
             continue
 
-        if args_.split:
-            learners_ensemble =\
-            get_split_learners_ensemble(
+        learners_ensemble =\
+            get_learners_ensemble(
                 n_learners=args_.n_learners,
                 client_type=CLIENT_TYPE[args_.method],
                 name=args_.experiment,
@@ -198,69 +117,31 @@ def init_clients(args_, root_path, logs_dir):
                 n_rounds=args_.n_rounds,
                 seed=args_.seed,
                 mu=args_.mu,
-                embedding_dim=args_.embedding_dimension,
                 n_gmm=args_.n_gmm,
-                domain_disc=args_.domain_disc,
+                embedding_dim=args_.embedding_dimension,
                 hard_cluster=args_.hard_cluster,
-                binary=args_.binary
+                binary=args_.binary,
+                phi_model=args.phi_model
             )
-        else:
-            learners_ensemble =\
-                get_learners_ensemble(
-                    n_learners=args_.n_learners,
-                    client_type=CLIENT_TYPE[args_.method],
-                    name=args_.experiment,
-                    device=args_.device,
-                    optimizer_name=args_.optimizer,
-                    scheduler_name=args_.lr_scheduler,
-                    initial_lr=args_.lr,
-                    input_dim=args_.input_dimension,
-                    output_dim=args_.output_dimension,
-                    n_rounds=args_.n_rounds,
-                    seed=args_.seed,
-                    mu=args_.mu,
-                    n_gmm=args_.n_gmm,
-                    embedding_dim=args_.embedding_dimension,
-                    hard_cluster=args_.hard_cluster,
-                    binary=args_.binary,
-                    phi_model=args.phi_model
-                )
 
         logs_path = os.path.join(logs_dir, "task_{}".format(task_id))
         os.makedirs(logs_path, exist_ok=True)
         logger = SummaryWriter(logs_path)
 
-        if CLIENT_TYPE[args_.method] == "conceptEM_tune" and "train" in logs_dir:
-
-            client = get_client(
-                client_type=CLIENT_TYPE[args_.method],
-                learners_ensemble=learners_ensemble,
-                q=args_.q,
-                train_iterator=train_iterator,
-                val_iterator=val_iterator,
-                test_iterator=test_iterator,
-                logger=logger,
-                local_steps=args_.local_steps,
-                tune_locally=True,
-                data_type = client_types[task_id],
-                feature_type = feature_types[task_id],
-                class_number = class_number
-            )
-        else:
-            client = get_client(
-                client_type=CLIENT_TYPE[args_.method],
-                learners_ensemble=learners_ensemble,
-                q=args_.q,
-                train_iterator=train_iterator,
-                val_iterator=val_iterator,
-                test_iterator=test_iterator,
-                logger=logger,
-                local_steps=args_.local_steps,
-                tune_locally=args_.locally_tune_clients,
-                data_type = client_types[task_id],
-                feature_type = feature_types[task_id],
-                class_number = class_number
-            )
+        client = get_client(
+            client_type=CLIENT_TYPE[args_.method],
+            learners_ensemble=learners_ensemble,
+            q=args_.q,
+            train_iterator=train_iterator,
+            val_iterator=val_iterator,
+            test_iterator=test_iterator,
+            logger=logger,
+            local_steps=args_.local_steps,
+            tune_locally=args_.locally_tune_clients,
+            data_type = client_types[task_id],
+            feature_type = feature_types[task_id],
+            class_number = class_number
+        )
 
         clients_.append(client)
 
@@ -296,9 +177,8 @@ def run_experiment(args_):
     os.makedirs(logs_path, exist_ok=True)
     global_test_logger = SummaryWriter(logs_path)
 
-    if args_.split:
-        global_learners_ensemble = \
-        get_split_learners_ensemble(
+    global_learners_ensemble = \
+        get_learners_ensemble(
             n_learners=args_.n_learners,
             client_type=CLIENT_TYPE[args_.method],
             name=args_.experiment,
@@ -313,38 +193,12 @@ def run_experiment(args_):
             mu=args_.mu,
             embedding_dim=args_.embedding_dimension,
             n_gmm=args_.n_gmm,
-            domain_disc=args_.domain_disc,
             hard_cluster=args_.hard_cluster,
-            binary=args_.binary
+            binary=args_.binary,
+            phi_model=args.phi_model
         )
-    else:
-        global_learners_ensemble = \
-            get_learners_ensemble(
-                n_learners=args_.n_learners,
-                client_type=CLIENT_TYPE[args_.method],
-                name=args_.experiment,
-                device=args_.device,
-                optimizer_name=args_.optimizer,
-                scheduler_name=args_.lr_scheduler,
-                initial_lr=args_.lr,
-                input_dim=args_.input_dimension,
-                output_dim=args_.output_dimension,
-                n_rounds=args_.n_rounds,
-                seed=args_.seed,
-                mu=args_.mu,
-                embedding_dim=args_.embedding_dimension,
-                n_gmm=args_.n_gmm,
-                hard_cluster=args_.hard_cluster,
-                binary=args_.binary,
-                phi_model=args.phi_model
-            )
 
-    if args_.decentralized:
-        aggregator_type = 'decentralized'
-    else:
-        aggregator_type = AGGREGATOR_TYPE[args_.method]
-
-    print(args_.split, args_.hard_cluster)
+    aggregator_type = AGGREGATOR_TYPE[args_.method]
 
     aggregator =\
         get_aggregator(
@@ -380,11 +234,12 @@ def run_experiment(args_):
     if_sufficient = False
     while current_round <= args_.n_rounds:
 
+        # if pre_action == 0:
+        #     aggregator.mix(diverse=False)
+        # else:
+        #     aggregator.mix(diverse=False)
+        aggregator.mix(diverse=False)
 
-        if pre_action == 0:
-            aggregator.mix(diverse=False)
-        else:
-            aggregator.mix(diverse=False)
 
         C = CLASS_NUMBER[LOADER_TYPE[args_.experiment]]
         n_learner = aggregator.n_learners
@@ -395,10 +250,10 @@ def run_experiment(args_):
             with open('./logs/{}/sample-weight-{}-{}.txt'.format(args_.experiment, args_.method, args_.suffix), 'w') as f:
                 for client_index, client in enumerate(clients):
                     for i in range(len(client.train_iterator.dataset.targets)):
-                        if args_.method == 'FedSoft':
-                            f.write('{},{},{}, {}\n'.format(client.data_type, client.train_iterator.dataset.targets[i], client.feature_types[i], aggregator.clusters_weights[client_index]))
-                        else:
-                            f.write('{},{},{}, {}\n'.format(client.data_type, client.train_iterator.dataset.targets[i], client.feature_types[i], client.samples_weights.T[i]))
+                        # if args_.method == 'FedSoft':
+                        #     f.write('{},{},{}, {}\n'.format(client.data_type, client.train_iterator.dataset.targets[i], client.feature_types[i], aggregator.clusters_weights[client_index]))
+                        # else:
+                        #     f.write('{},{},{}, {}\n'.format(client.data_type, client.train_iterator.dataset.targets[i], client.feature_types[i], client.samples_weights.T[i]))
                         
                         for j in range(len(cluster_label_weights)):
                             cluster_weights[j] += client.samples_weights[j][i]
@@ -483,8 +338,8 @@ if __name__ == "__main__":
     args = parse_args()
 
     # update the real values from config.py
-    args.experiment = config.dataset_name
-    args.method = config.strategy
+    args.experiment = 'cifar10-c'   # DO NOT CHANGE
+    args.method = config.strategy           # TODO
     args.n_learners = config.K_model
     args.n_rounds = config.n_rounds
     args.bz = config.batch_size
@@ -493,10 +348,13 @@ if __name__ == "__main__":
     args.lr = config.lr
     args.seed = config.random_seed
     
-    if torch.backends.mps.is_available() and torch.backends.mps.is_built():
-        args.device = torch.device("mps")
-    elif torch.cuda.is_available():
-        args.device = torch.device("cuda")
+    if config.gpu == -1:
+        if torch.backends.mps.is_available() and torch.backends.mps.is_built():
+            args.device = torch.device("mps")
+        elif torch.cuda.is_available():
+            args.device = torch.device("cuda:0")
+    else:
+        args.device = torch.device("cuda:{}".format(config.gpu))
 
     print(f"USING DEVICE: {args.device}")
 

@@ -100,6 +100,8 @@ class Client(object):
 
         # self.labels_weights = torch.ones(self.n_learners, self.n_train_samples * 80) / self.n_learners
         self.labels_weights = torch.ones(self.n_learners, self.n_train_samples) / self.n_learners
+        # TODO
+        # print(f"shape of labels_weights: {self.labels_weights.shape}")
         self.labels_mask = torch.zeros(class_number, self.n_train_samples)
         self.label_stats = self.get_label_stats()
         self.need_new_model = False
@@ -257,7 +259,6 @@ class Client(object):
 
         # self.step_line_search(self.learners_ensemble, initial_params)
 
-        # TODO: add flag arguments to use `free_gradients`
         # self.learners_ensemble.free_gradients()
 
         return client_updates
@@ -388,6 +389,8 @@ class FedRC(Client):
 
     def update_sample_weights(self):
         all_losses = self.learners_ensemble.gather_losses(self.val_iterator)
+        # TODO
+        # print(f"shape of all_losses: {all_losses.shape}")
         L = - all_losses.T - torch.log(self.labels_weights.T)
         # L = L.reshape(self.n_train_samples, 80, self.n_learners)
         # L = torch.sum(L, dim=1)
@@ -590,7 +593,6 @@ class FeSEM(Client):
 
         # self.step_line_search(self.learners_ensemble, initial_params)
 
-        # TODO: add flag arguments to use `free_gradients`
         # self.learners_ensemble.free_gradients()
 
         return client_updates

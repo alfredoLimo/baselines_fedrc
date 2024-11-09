@@ -21,6 +21,16 @@ from torch.utils.data import DataLoader
 
 from tqdm import tqdm
 
+import sys
+import os
+
+# Add the parent directory to sys.path
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, parent_dir)
+
+# Now you can import your module
+import config
+
 
 def get_data_dir(experiment_name):
     """
@@ -406,7 +416,6 @@ def get_split_learners_ensemble(
             # model = resnet_pca(embedding_size=embedding_dim, name=name, input_size=(3, 32, 32))
             # model = cACnetwork(embedding_size=embedding_dim, input_size=(3, 32, 32))
 
-            # TODO
             # model = resnet_pca(embedding_size=embedding_dim, name=name, input_size=(3, 32, 32))
             model = LeNet5(in_channels=3, num_classes=10, input_size=(32, 32))
             if global_ac == None:
@@ -528,7 +537,10 @@ def get_learner(
             # model = get_mobilenet(n_classes=10)
             # TODO
             # model = get_resnet18(n_classes=10)
-            model = LeNet5(in_channels=3, num_classes=10, input_size=(32, 32))
+            if config.dataset_name in ['MNIST', 'FMNIST']:
+                model = LeNet5(in_channels=3, num_classes=10, input_size=(28, 28))
+            else:
+                model = LeNet5(in_channels=3, num_classes=10, input_size=(32, 32))
         else:
             model = init_model
             model.classifier[1] = nn.Linear(model.classifier[1].in_features, 10)

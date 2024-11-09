@@ -73,33 +73,29 @@ def parse_args(args_list=None):
         type=int,
         default=None
     )
-    # TODO #Model 
     parser.add_argument(
         '--n_learners',
         help='number of learners_ensemble to be used with `FedEM`; ignored if method is not `FedEM`; default is 3',
         type=int,
         default=4
     )
-    # TODO fit
     parser.add_argument(
         '--n_rounds',
         help='number of communication rounds; default is 10',
         type=int,
         default=10
     )
-    # TODO fit
     parser.add_argument(
         '--bz',
         help='batch_size; default is 1',
         type=int,
         default=64
     )
-    # TODO fit
     parser.add_argument(
         '--local_steps',
         help='number of local steps before communication; default is 1',
         type=int,
-        default=1
+        default=2
     )
     parser.add_argument(
         '--log_freq',
@@ -107,7 +103,6 @@ def parse_args(args_list=None):
         type=int,
         default=1
     )
-    # TODO Dario?
     parser.add_argument(
         '--device',
         help='device to use, either cpu or cuda; default is cpu',
@@ -120,7 +115,6 @@ def parse_args(args_list=None):
         type=str,
         default="sgd"
     )
-    # TODO fit
     parser.add_argument(
         "--lr",
         type=float,
@@ -133,7 +127,6 @@ def parse_args(args_list=None):
         help='learning rate for clients weights; only used for agnostic FL; default is 0.',
         default=0.
     )
-    # TODO Dario?
     parser.add_argument(
         "--lr_scheduler",
         help='learning rate decay scheme to be used;'
@@ -183,7 +176,6 @@ def parse_args(args_list=None):
         help='if selected, feature and classifiers will be splitted',
         action='store_true'
     )
-    # TODO ?
     parser.add_argument(
         "--hard_cluster",
         help='if selected, use hard cluster for prediction',
@@ -232,14 +224,12 @@ def parse_args(args_list=None):
         help='directory to save checkpoints once the training is over; if not specified checkpoints are not saved',
         default=argparse.SUPPRESS
     )
-    # TODO fit
     parser.add_argument(
         "--seed",
         help='random seed',
         type=int,
         default=42
     )
-    # TODO ?
     parser.add_argument(
         '--embedding_dimension',
         help='the dimension of the internal embedding',

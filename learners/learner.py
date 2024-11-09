@@ -260,11 +260,11 @@ class Learner:
         loss_vec_phi = 0.0
         client_representation = None
 
+        x_sum = []
         for x, y, indices in iterator:
             x = x.to(self.device).type(torch.float32)
             y = y.to(self.device)
-
-
+            x_sum.append(x)
 
             n_samples += y.size(0)
 
@@ -300,7 +300,7 @@ class Learner:
             y.to('cpu')
         
         self.model.to('cpu')
-
+        # print(f"Tot samples {torch.cat(x_sum).shape}")
 
 
 
