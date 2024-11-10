@@ -698,7 +698,7 @@ def get_learners_ensemble(
             if name == "mnist9":
                 ckpt = 'AE_MNIST1.pt'
             if global_ac == None:
-                global_ac = Autoencoder(
+                global_ac = Autoencoder( # type: ignore
                     model=model,
                     checkpoint=None,
                     criterion=torch.nn.BCELoss(reduction='none'),
@@ -726,7 +726,7 @@ def get_learners_ensemble(
             assert embedding_dim is not None, "Embedding dimension not specified!!"
             model = IDnetwork(embedding_size=input_dim)
             if global_ac == None:
-                global_ac = Autoencoder(
+                global_ac = Autoencoder( # type: ignore
                     model=model,
                     checkpoint=None,
                     criterion=torch.nn.MSELoss(reduction='none'),
@@ -757,7 +757,7 @@ def get_learners_ensemble(
             # model = cACnetwork(embedding_size=embedding_dim, input_size=(3, 32, 32))
             model = resnet_pca(embedding_size=embedding_dim, name=name, input_size=(3, 32, 32))
             if global_ac == None:
-                global_ac = Autoencoder(
+                global_ac = Autoencoder( # type: ignore
                     model=model,
                     # checkpoint='AE_CIFAR10.pt',
                     checkpoint=None,
@@ -1442,7 +1442,7 @@ def get_aggregator(
             domain_disc=domain_disc
         )
     elif aggregator_type == "ACGcentralized":
-        return ACGCentralizedAggregator(
+        return ACGCentralizedAggregator( # type: ignore
             clients=clients,
             global_learners_ensemble=global_learners_ensemble,
             log_freq=log_freq,
@@ -1477,7 +1477,7 @@ def get_aggregator(
             domain_disc=domain_disc
         )
     elif aggregator_type == "conceptem_ts":
-        return FedRCTSAggregator(
+        return FedRCTSAggregator( # type: ignore
             clients=clients,
             global_learners_ensemble=global_learners_ensemble,
             log_freq=log_freq,
