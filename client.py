@@ -3,8 +3,14 @@ import torch.nn.functional as F
 from copy import deepcopy
 from utils.torch_utils import *
 from math import log
+import numpy as np
+import os
+
 
 import config as cfg
+
+import warnings
+warnings.simplefilter("ignore", UserWarning)
 
 class Client(object):
     r"""Implements one clients
@@ -54,7 +60,8 @@ class Client(object):
             tune_locally=False,
             data_type = 0,
             feature_types = None,
-            class_number = 10
+            class_number = 10,
+            id = 0,
     ):
 
         self.learners_ensemble = learners_ensemble
@@ -62,9 +69,11 @@ class Client(object):
         self.tune_locally = tune_locally
         self.data_type = data_type
         self.feature_types = feature_types
-        self.cluster = torch.ones(self.n_learners) / self.n_learners
+        self.cluster = torch.ones(self.n_learners) / self.n_learners # weight 
+        # print(f"cluster: {self.cluster}")
         self.class_number = class_number
         self.global_learners_ensemble = None
+        self.id = id
 
         if self.tune_locally:
             self.tuned_learners_ensemble = deepcopy(self.learners_ensemble)
@@ -265,16 +274,41 @@ class Client(object):
 
     # TODO
     def write_logs(self, cur_round=0):
-        print(f"Round {cur_round} testing")
+        # print(f"Round {cur_round} testing")
 
         if cur_round == 0:
             print("Not trained yet..")
 
         # If last round, change weights here to save three types of results
         if cur_round == cfg.n_rounds:
-            print("TODO Last round, change weights here to save three types of results")
-            pass
-
+            # print("TODO Last round, change weights here to save three types of results")
+            # 1. evaluation - known weights
+            test_loss_1, test_acc_1 = self.learners_ensemble.evaluate_iterator(self.test_iterator)
+            print(f"1. Client {self.id} - Test loss: {test_loss_1}, Test accuracy: {test_acc_1} - clusters {self.cluster}")
+            
+            # 2. evaluation - unknown weights - average cluster weights
+            self.cluster = torch.ones(self.n_learners) / self.n_learners
+            # self.update_learners_weights()
+            self.learners_ensemble.learners_weights = torch.ones(self.n_learners) / self.n_learners
+            test_loss_2, test_acc_2 = self.learners_ensemble.evaluate_iterator(self.test_iterator)
+            print(f"2. Client {self.id} - Test loss: {test_loss_2}, Test accuracy: {test_acc_2} - clusters {self.cluster}")
+            
+            # 3. evaluation - unknown weights - average cluster weights across clients
+            average_cluster = torch.load("average_cluster.pt", weights_only=False)
+            # os.remove("average_cluster.pt")
+            self.cluster = average_cluster
+            # self.update_learners_weights()
+            self.learners_ensemble.learners_weights = torch.load("average_cluster.pt", weights_only=False)
+            test_loss_3, test_acc_3 = self.learners_ensemble.evaluate_iterator(self.test_iterator)
+            print(f"3. Client {self.id} - Test loss: {test_loss_3}, Test accuracy: {test_acc_3} - clusters {self.cluster}")
+            
+            # save results npy
+            results = np.array([test_loss_1, test_acc_1, test_loss_2, test_acc_2, test_loss_3, test_acc_3])
+            np.save(f"results_{self.id}.npy", results)
+              
+            
+            
+        
         if self.tune_locally:
             self.update_tuned_learners()
             train_loss, train_acc = self.tuned_learners_ensemble.evaluate_iterator(self.val_iterator)
@@ -284,8 +318,8 @@ class Client(object):
             train_loss, train_acc = self.global_learners_ensemble.evaluate_iterator(self.val_iterator)
             test_loss, test_acc = self.global_learners_ensemble.evaluate_iterator(self.test_iterator)
         else:
-            print("flag")
-            train_loss, train_acc = self.learners_ensemble.evaluate_iterator(self.val_iterator)
+            # print("flag")
+            train_loss, train_acc = self.learners_ensemble.evaluate_iterator(self.val_iterator)  #HERE
             test_loss, test_acc = self.learners_ensemble.evaluate_iterator(self.test_iterator)
             # print(train_loss, train_acc, test_loss, test_acc)
 
@@ -300,7 +334,7 @@ class Client(object):
         pass
 
     def update_learners_weights(self):
-        pass
+        self.learners_ensemble.learners_weights = self.cluster  # update weights
 
     def update_tuned_learners(self):
         if not self.tune_locally:

@@ -28,7 +28,7 @@ for fold in $(seq 0 $(($k_folds - 1))); do
     rm -rf data/cur_datasets/* 
     python generate_datasets.py --fold "$fold"
 
-    python start_experiment.py
+    python start_experiment.py --fold "$fold"
 
     # This will allow you to use CTRL+C to stop all background processes
     trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM
@@ -39,16 +39,14 @@ for fold in $(seq 0 $(($k_folds - 1))); do
 
 done
 
-# TODO Dario
 # K-Fold evaluation, if k_folds > 1
-# if [ "$k_folds" -gt 1 ]; then
+if [ "$k_folds" -gt 1 ]; then
 
-#     echo -e "\n\033[1;36mAveraging the results of all folds\033[0m\n"
-#     # Averaging the results of all folds
-#     python public/average_results.py
-#     # Plot confidence interval plots
-#     python public/plots_across_folds.py
-# fi
+    echo -e "\n\033[1;36mAveraging the results of all folds\033[0m\n"
+    # Averaging the results of all folds
+    python average_results.py
+
+fi
 
 
 echo -e "\n\033[1;36mExperiment completed successfully\033[0m\n"

@@ -1145,7 +1145,8 @@ def get_client(
         tune_locally,
         data_type = 0,
         feature_type = None,
-        class_number = 10
+        class_number = 10,
+        id=0
 ):
     """
 
@@ -1173,7 +1174,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "mixture_SW":
         return MixtureClient_SW(
@@ -1186,7 +1188,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "fedrc":
         return FedRC(
@@ -1199,7 +1202,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "fedrc_tune":
         return FedRC(
@@ -1212,7 +1216,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "fedrc_Adam":
         return FedRC_Adam(
@@ -1225,7 +1230,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "fedrc_SW":
         return FedRC_SW(
@@ -1238,7 +1244,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "ACGmixture":
         return ACGMixtureClient(
@@ -1251,7 +1258,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "fedrc_DP":
         return FedRC_DP(
@@ -1264,7 +1272,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "IFCA":
         return IFCA(
@@ -1277,7 +1286,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "FeSEM":
         return FeSEM(
@@ -1290,7 +1300,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "AFL":
         return AgnosticFLClient(
@@ -1303,7 +1314,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "FFL":
         return FFLClient(
@@ -1317,7 +1329,8 @@ def get_client(
             q=q,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     elif client_type == "FedSoft":
         return FedSoft(
@@ -1330,7 +1343,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
     else:
         return Client(
@@ -1343,7 +1357,8 @@ def get_client(
             tune_locally=tune_locally,
             data_type=data_type,
             feature_types=feature_type,
-            class_number = class_number
+            class_number = class_number,
+            id = id
         )
 
 

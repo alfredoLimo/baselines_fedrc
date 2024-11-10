@@ -14,6 +14,9 @@ from sklearn.cluster import KMeans
 
 from utils.torch_utils import *
 import torch.nn as nn
+
+import warnings
+warnings.simplefilter("ignore", UserWarning)
 # from utils.utils import get_learner
 # from utils.utils import add_new_learner
 
@@ -204,7 +207,7 @@ class Aggregator(ABC):
 
             for client_id, client in enumerate(clients):
 
-                train_loss, train_acc, test_loss, test_acc = client.write_logs(self.c_round)
+                train_loss, train_acc, test_loss, test_acc = client.write_logs(self.c_round) # Local testing
 
                 if client_type == 'test':
                     test_train_acces.append(train_acc)
@@ -250,12 +253,12 @@ class Aggregator(ABC):
 
         print("+" * 30)
         
-        print('test train accs: ' + str(test_train_acces))
-        print('test_test_acces: ' + str(test_test_acces))
-        print('test train variance: ' + str(torch.std(torch.tensor(test_train_acces) + 0.0).item()))
-        print('test test variance: ' + str(torch.std(torch.tensor(test_test_acces) + 0.0).item()))
-        print('test train mean: ' + str(torch.mean(torch.tensor(test_train_acces) + 0.0).item()))
-        print('test test mean: ' + str(torch.mean(torch.tensor(test_test_acces) + 0.0).item()))
+        # print('test train accs: ' + str(test_train_acces))
+        # print('test_test_acces: ' + str(test_test_acces))
+        # print('test train variance: ' + str(torch.std(torch.tensor(test_train_acces) + 0.0).item()))
+        # print('test test variance: ' + str(torch.std(torch.tensor(test_test_acces) + 0.0).item()))
+        # print('test train mean: ' + str(torch.mean(torch.tensor(test_train_acces) + 0.0).item()))
+        # print('test test mean: ' + str(torch.mean(torch.tensor(test_test_acces) + 0.0).item()))
         with open('./logs/{}/test-results-{}-{}.txt'.format(self.experiment, self.method, self.suffix), 'a+') as f:
             f.write('test train accs: ' + str(test_train_acces) + '\n')
             f.write('test_test_acces: ' + str(test_test_acces) + '\n')
@@ -413,6 +416,25 @@ class CentralizedAggregator(Aggregator):
 
         # assign the updated model to all clients
         self.update_clients()
+        
+        # take clients HERE
+        self.sample_clients()
+        nn = 0
+        cluster_list = []
+        for client in self.sampled_clients:
+            cluster_list.append(client.cluster)
+            nn += 1
+        
+        # cat
+        cluster_list = torch.stack(cluster_list)
+        print('cluster_list: ' + str(cluster_list))
+        # sum and normalize
+        sum_cluster = cluster_list.sum(dim=0)
+        average_cluster = sum_cluster / sum_cluster.sum()
+        print('average_cluster: ' + str(average_cluster))
+        # save torch
+        # np.save('average_cluster.npy', cluster_list.numpy())
+        torch.save(average_cluster, 'average_cluster.pt')
 
         self.c_round += 1
 
@@ -420,7 +442,10 @@ class CentralizedAggregator(Aggregator):
             self.write_logs()
 
     def update_clients(self):
+        # nn = 0
         for client in self.clients:
+            # print(f"Client {nn} - cluster {client.cluster}")
+            # nn += 1
             for learner_id, learner in enumerate(client.learners_ensemble):
                 copy_model(learner.model, self.global_learners_ensemble[learner_id].model)
 
@@ -476,8 +501,10 @@ class FeSEMAggregator(CentralizedAggregator):
     def mix(self, diverse=False):
         self.sample_clients()
 
-
+        # nn = 0
         for client in self.sampled_clients:
+            # print(f"Client {nn} - cluster {client.cluster}")
+            # nn += 1
             client.step(diverse=diverse)
             target_learner = torch.nonzero(client.learners_ensemble.learners_weights == max(client.learners_ensemble.learners_weights))[0]
             if client.learners_ensemble.learners_weights[target_learner] > 0.9:
@@ -511,6 +538,26 @@ class FeSEMAggregator(CentralizedAggregator):
             average_learners(disc_learners, self.global_learners_ensemble.domain_disc_learner, weights=torch.ones((len(self.sampled_clients),)) / len(self.sampled_clients))
 
         self.update_clients()
+        
+        # take clients HERE
+        self.sample_clients()
+        nn = 0
+        cluster_list = []
+        for client in self.sampled_clients:
+            cluster_list.append(client.cluster)
+            nn += 1
+        
+        # cat
+        cluster_list = torch.stack(cluster_list)
+        print('cluster_list: ' + str(cluster_list))
+        
+        # sum and normalize
+        sum_cluster = cluster_list.sum(dim=0)
+        average_cluster = sum_cluster / sum_cluster.sum()
+        print('average_cluster: ' + str(average_cluster))
+        # save torch
+        # np.save('average_cluster.npy', cluster_list.numpy())
+        torch.save(average_cluster, 'average_cluster.pt')
 
         # assign the updated model to all clients
         # self.update_clients()
@@ -1488,12 +1535,12 @@ class ICFLAggregator(CentralizedAggregator):
 
         print("+" * 30)
         
-        print('test train accs: ' + str(test_train_acces))
-        print('test_test_acces: ' + str(test_test_acces))
-        print('test train variance: ' + str(torch.std(torch.tensor(test_train_acces) + 0.0).item()))
-        print('test test variance: ' + str(torch.std(torch.tensor(test_test_acces) + 0.0).item()))
-        print('test train mean: ' + str(torch.mean(torch.tensor(test_train_acces) + 0.0).item()))
-        print('test test mean: ' + str(torch.mean(torch.tensor(test_test_acces) + 0.0).item()))
+        # print('test train accs: ' + str(test_train_acces))
+        # print('test_test_acces: ' + str(test_test_acces))
+        # print('test train variance: ' + str(torch.std(torch.tensor(test_train_acces) + 0.0).item()))
+        # print('test test variance: ' + str(torch.std(torch.tensor(test_test_acces) + 0.0).item()))
+        # print('test train mean: ' + str(torch.mean(torch.tensor(test_train_acces) + 0.0).item()))
+        # print('test test mean: ' + str(torch.mean(torch.tensor(test_test_acces) + 0.0).item()))
         with open('./logs/{}/test-results-{}-{}.txt'.format(self.experiment, self.method, self.suffix), 'a+') as f:
             f.write('test train accs: ' + str(test_train_acces) + '\n')
             f.write('test_test_acces: ' + str(test_test_acces) + '\n')

@@ -242,7 +242,12 @@ def parse_args(args_list=None):
         type=int,
         default=1
     )
-
+    parser.add_argument(
+        '--fold',
+        help='number of fold for cross-validation',
+        type=int,
+        default=0
+    )
 
     if args_list:
         args = parser.parse_args(args_list)

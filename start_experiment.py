@@ -140,7 +140,8 @@ def init_clients(args_, root_path, logs_dir):
             tune_locally=args_.locally_tune_clients,
             data_type = client_types[task_id],
             feature_type = feature_types[task_id],
-            class_number = class_number
+            class_number = class_number,
+            id=task_id,
         )
 
         clients_.append(client)
@@ -330,6 +331,38 @@ def run_experiment(args_):
         os.makedirs(save_dir, exist_ok=True)
         aggregator.save_state(save_dir)
 
+def mean_results(n_clients, fold):
+    x = []
+    for i in range(n_clients):
+        x.append(np.load(f"results_{i}.npy"))
+
+    # delete files
+    for i in range(n_clients):
+        os.remove(f"results_{i}.npy")
+        
+    # delete previous average_cluster.pt file
+    os.remove('average_cluster.pt')
+        
+    # stack
+    x = np.stack(x, axis=0)   
+
+    # Save metrics as numpy array
+    metrics = {
+        "loss": list(x[:,0]),
+        "accuracy": list(x[:,1]),
+        "average_loss": np.mean(x[:,0]),
+        "average_accuracy": np.mean(x[:,1]),
+        "loss_expected": list(x[:,2]),
+        "accuracy_expected": list(x[:,3]),
+        "average_loss_expected": np.mean(x[:,2]),
+        "average_accuracy_expected": np.mean(x[:,3]),
+        "loss_cluster": list(x[:,4]),
+        "accuracy_cluster": list(x[:,5]),
+        "average_loss_cluster": np.mean(x[:,4]),
+        "average_accuracy_cluster": np.mean(x[:,5]), 
+    }
+    np.save(f'test_metrics_fold_{fold}.npy', metrics)
+
 
 if __name__ == "__main__":
     torch.backends.cudnn.deterministic = True
@@ -339,7 +372,7 @@ if __name__ == "__main__":
 
     # update the real values from config.py
     args.experiment = 'cifar10-c'   # DO NOT CHANGE
-    args.method = config.strategy           # TODO
+    args.method = config.strategy           
     args.n_learners = config.K_model
     args.n_rounds = config.n_rounds
     args.bz = config.batch_size
@@ -348,14 +381,18 @@ if __name__ == "__main__":
     args.lr = config.lr
     args.seed = config.random_seed
     
+    
     if config.gpu == -1:
         if torch.backends.mps.is_available() and torch.backends.mps.is_built():
             args.device = torch.device("mps")
         elif torch.cuda.is_available():
-            args.device = torch.device("cuda:0")
+            args.device = torch.device(f"cuda:{config.name_gpu}")
     else:
         args.device = torch.device("cuda:{}".format(config.gpu))
 
     print(f"USING DEVICE: {args.device}")
 
     run_experiment(args)
+    
+    # average results from all clients
+    mean_results(config.n_clients, args.fold)
