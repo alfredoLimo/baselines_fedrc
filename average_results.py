@@ -2,6 +2,14 @@ import numpy as np
 import os
 import pandas as pd
 import config as cfg
+import argparse
+
+
+# Get arguments
+parser = argparse.ArgumentParser(description='Generate datasets for ANDA')
+parser.add_argument('--scaling', type=int, default=0, help='scaling num')
+parser.add_argument('--strategy', type=str, help='strategy')
+args = parser.parse_args()
 
 
 def calculate_mean_std_metrics(metrics):
@@ -53,7 +61,7 @@ if not os.path.exists(f'results/{cfg.default_path}'):
     os.makedirs(f'results/{cfg.default_path}')
 # Save the mean metrics to a file
 result_pd = pd.DataFrame(result)
-result_pd.to_excel(f'results/{cfg.default_path}/mean_std_test_metrics_{cfg.non_iid_type}_{cfg.args}.xlsx', index=False)
+result_pd.to_excel(f'results/{cfg.default_path}/mean_std_test_metrics_{args.strategy}_{args.scaling}.xlsx', index=False)
 print("Saved correctly mean and std of test metrics to file")
 
 

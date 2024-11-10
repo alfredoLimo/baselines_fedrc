@@ -11,10 +11,108 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 from ANDA import anda
 
+
+
 # Get arguments
 parser = argparse.ArgumentParser(description='Generate datasets for ANDA')
 parser.add_argument('--fold', type=int, default=0, help='Fold number of the cross-validation')
+parser.add_argument('--scaling', type=int, default=0, help='scaling num')
 args = parser.parse_args()
+ 
+ 
+ 
+cur_args = {}
+if cfg.non_iid_type == 'feature_skew_strict':
+    #1-4
+    if args.scaling == 1:
+        cur_rot = 2
+        cur_col = 1
+    elif args.scaling == 2:
+        cur_rot = 2
+        cur_col = 3
+    elif args.scaling == 3:
+        cur_rot = 4
+        cur_col = 1
+    elif args.scaling == 4:
+        cur_rot = 4
+        cur_col = 3
+    else:
+        raise KeyError
+    
+    # cur_rot = (args.scaling + 1) // 2
+    # cur_col = 1 if args.scaling % 2 != 0 else 3
+ 
+    print(f"Rotation: {cur_rot}, Color: {cur_col}")
+    cur_args = {
+        'set_rotation': True,
+        'set_color': True,
+        'rotations':cur_rot,
+        'colors':cur_col,
+    }
+    
+elif cfg.non_iid_type == 'label_skew_strict':
+    #1-4
+    if args.scaling == 1:
+        cur_class  = 8
+    elif args.scaling == 2:
+        cur_class  = 6
+    elif args.scaling == 3:
+        cur_class  = 4
+    elif args.scaling == 4:
+        cur_class  = 2
+    else:
+        raise KeyError
+    
+    # cur_class = 10-args.scaling
+    print(f"Class: {cur_class}")
+ 
+    cur_args = {
+        'client_n_class':cur_class,
+        'py_bank':5,
+    }
+    
+elif cfg.non_iid_type == 'feature_condition_skew':
+    #1-4    
+    # cur_scaling = args.scaling /10
+    cur_args = {
+        'random_mode':True,
+        'mixing_label_number':args.scaling,
+        'scaling_label_low':1,
+        'scaling_label_high':1,
+    }
+    
+elif cfg.non_iid_type == 'label_condition_skew':
+    #1-4
+    if args.scaling == 1:
+        cur_class  = 2
+    elif args.scaling == 2:
+        cur_class  = 4
+    elif args.scaling == 3:
+        cur_class  = 6
+    elif args.scaling == 4:
+        cur_class  = 8
+    else:
+        raise KeyError
+    
+    # cur_class = args.scaling +1
+    print(f"Class: {cur_class}")
+ 
+    cur_args = {
+        'set_rotation': True,
+        'set_color': True,
+        'rotations':4,
+        'colors':1,
+        'random_mode':True,
+        'rotated_label_number':cur_class,
+        'colored_label_number':cur_class,
+    }    
+else:
+    raise ValueError("Non-IID type not found! Please check the ANDA page for more details.")
+ 
+
+
+
+
 
 # valid dataset names
 assert cfg.dataset_name in ['CIFAR10', 'CIFAR100', 'MNIST', 'FMNIST', 'EMNIST'], \
