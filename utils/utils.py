@@ -358,7 +358,7 @@ def get_split_learners_ensemble(
             if name == "mnist9":
                 ckpt = 'AE_MNIST1.pt'
             if global_ac == None:
-                global_ac = Autoencoder(
+                global_ac = Autoencoder( # type: ignore
                     model=model,
                     checkpoint=None,
                     criterion=torch.nn.BCELoss(reduction='none'),
@@ -386,7 +386,7 @@ def get_split_learners_ensemble(
             assert embedding_dim is not None, "Embedding dimension not specified!!"
             model = IDnetwork(embedding_size=input_dim)
             if global_ac == None:
-                global_ac = Autoencoder(
+                global_ac = Autoencoder( # type: ignore
                     model=model,
                     checkpoint=None,
                     criterion=torch.nn.MSELoss(reduction='none'),
@@ -419,7 +419,7 @@ def get_split_learners_ensemble(
             # model = resnet_pca(embedding_size=embedding_dim, name=name, input_size=(3, 32, 32))
             model = LeNet5(in_channels=3, num_classes=10, input_size=(32, 32))
             if global_ac == None:
-                global_ac = Autoencoder(
+                global_ac = Autoencoder( # type: ignore
                     model=model,
                     # checkpoint='AE_CIFAR10.pt',
                     checkpoint=None,
