@@ -1,6 +1,6 @@
 # Overall settings
 k_folds = 5 # number of folds for cross-validation, if 1, no cross-validation
-strategy = 'fedrc'  # TODO ['fedrc','FedEM','FeSEM','FedAvg']
+strategy = 'FeSEM'  # ['fedrc','FedEM','FeSEM','FedAvg']
 random_seed = 42
 n_clients = 10   
 K_model = 2         # TODO, same as ifca
@@ -17,7 +17,7 @@ plot_clients = False
 args = {
     'set_rotation': True,
     'set_color': True,
-    'rotations':2,
+    'rotations':1,
     'colors':1,
     # 'py_bank': 5,
     # 'client_n_class': 5,

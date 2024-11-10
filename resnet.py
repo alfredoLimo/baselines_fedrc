@@ -17,8 +17,6 @@ class Resnet(object):
             lr_scheduler=None
     ):
 
-
-
         # model.fc = nn.Linear(model.fc.in_features, n_classes)
         if checkpoint is not None:
             checkpoint_path = os.path.join('learners', checkpoint)
