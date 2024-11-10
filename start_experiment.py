@@ -232,7 +232,7 @@ def run_experiment(args_):
     mean_Is_pre = []
     rho = 0.3
     if_sufficient = False
-    while current_round <= args_.n_rounds:
+    while current_round < args_.n_rounds:
 
         # if pre_action == 0:
         #     aggregator.mix(diverse=False)
@@ -246,23 +246,23 @@ def run_experiment(args_):
         cluster_label_weights = [[0] * C for _ in range(n_learner)]
         cluster_weights = [0 for _ in range(n_learner)]
         global_flags = [[] for _ in range(n_learner)]
-        if 'shakespeare' not in args_.experiment:
-            with open('./logs/{}/sample-weight-{}-{}.txt'.format(args_.experiment, args_.method, args_.suffix), 'w') as f:
-                for client_index, client in enumerate(clients):
-                    for i in range(len(client.train_iterator.dataset.targets)):
-                        # if args_.method == 'FedSoft':
-                        #     f.write('{},{},{}, {}\n'.format(client.data_type, client.train_iterator.dataset.targets[i], client.feature_types[i], aggregator.clusters_weights[client_index]))
-                        # else:
-                        #     f.write('{},{},{}, {}\n'.format(client.data_type, client.train_iterator.dataset.targets[i], client.feature_types[i], client.samples_weights.T[i]))
-                        
-                        for j in range(len(cluster_label_weights)):
-                            cluster_weights[j] += client.samples_weights[j][i]
-                    f.write('\n')
-        else:
+        
+        with open('./logs/{}/sample-weight-{}-{}.txt'.format(args_.experiment, args_.method, args_.suffix), 'w') as f:
             for client_index, client in enumerate(clients):
                 for i in range(len(client.train_iterator.dataset.targets)):
+                    # if args_.method == 'FedSoft':
+                    #     f.write('{},{},{}, {}\n'.format(client.data_type, client.train_iterator.dataset.targets[i], client.feature_types[i], aggregator.clusters_weights[client_index]))
+                    # else:
+                    #     f.write('{},{},{}, {}\n'.format(client.data_type, client.train_iterator.dataset.targets[i], client.feature_types[i], client.samples_weights.T[i]))
+                    
                     for j in range(len(cluster_label_weights)):
-                            cluster_weights[j] += client.samples_weights[j][i]
+                        cluster_weights[j] += client.samples_weights[j][i]
+                f.write('\n')
+        # else:
+        #     for client_index, client in enumerate(clients):
+        #         for i in range(len(client.train_iterator.dataset.targets)):
+        #             for j in range(len(cluster_label_weights)):
+        #                     cluster_weights[j] += client.samples_weights[j][i]
 
         # with open('./logs/{}/mean-I-{}-{}-{}.txt'.format(args_.experiment, args_.method, args_.gamma, args_.suffix), 'a+') as f:
         #     mean_Is = torch.zeros((len(clients),))
@@ -277,7 +277,7 @@ def run_experiment(args_):
         # with open('./logs/{}/cluster-weights-{}-{}-{}.txt'.format(args_.experiment, args_.method, args_.gamma, args_.suffix), 'a+') as f:
         #     f.write('{}'.format(cluster_weights))
         #     f.write('\n')
-        print(cluster_weights)
+#        print(cluster_weights) ?
         # print(client_types)
         # print(clusters)
 

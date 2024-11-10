@@ -55,9 +55,9 @@ EXTENSIONS = {
 }
 
 AGGREGATOR_TYPE = {
-    "FedEM": "centralized",
+    "FedEM": "centralized",         # tag
     "FedEM_SW": "FedIAS",
-    "fedrc": "centralized",
+    "fedrc": "centralized",         # tag
     "fedrc_tune": "centralized",
     "fedrc_Adam": "centralized",
     "fedrc_DP": "centralized",
@@ -74,14 +74,14 @@ AGGREGATOR_TYPE = {
     "AFL": "AFL",
     "FFL": "FFL",
     "IFCA": "IFCA",
-    "FeSEM": "FeSEM",
+    "FeSEM": "FeSEM",           # tag
     "FeSEM_SW": "FedIAS",
     "FedSoft": "FedSoft",
     "FedGMM": "ACGcentralized"
 }
 
 CLIENT_TYPE = {
-    "FedEM": "mixture",
+    "FedEM": "mixture",         # tag   
     "FedEM_SW": "mixture_SW",
     "AFL": "AFL",
     "FFL": "FFL",
@@ -95,7 +95,7 @@ CLIENT_TYPE = {
     "clustered": "normal",
     "stoCFL":"normal",
     "ICFL":"normal",
-    "fedrc": "fedrc",
+    "fedrc": "fedrc",               # tag
     "fedrc_Adam": "fedrc_Adam",
     "fedrc_DP": "fedrc_DP",
     "fedrc_tune": "fedrc_tune",
@@ -104,7 +104,7 @@ CLIENT_TYPE = {
     "fedrc_LESW": "fedrc_LESW",
     "fedrc_LESWC": "fedrc_LESWC",
     "fedrc_ESW": "fedrc_ESW",
-    "FeSEM": "FeSEM",
+    "FeSEM": "FeSEM",        # tag
     "FeSEM_SW": "FeSEM",
     "FedSoft": "FedSoft",
     "FedGMM": "ACGmixture"

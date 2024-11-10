@@ -204,7 +204,7 @@ class Aggregator(ABC):
 
             for client_id, client in enumerate(clients):
 
-                train_loss, train_acc, test_loss, test_acc = client.write_logs()
+                train_loss, train_acc, test_loss, test_acc = client.write_logs(self.c_round)
 
                 if client_type == 'test':
                     test_train_acces.append(train_acc)
@@ -217,6 +217,7 @@ class Aggregator(ABC):
                     with np.printoptions(precision=3, suppress=True):
                         print("Pi: ", client.learners_weights.numpy())
 
+                    # TODO
                     print(f"Train Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.3f}%|", end="")
                     print(f"Test Loss: {test_loss:.3f} | Test Acc: {test_acc * 100:.3f}% |")
 
@@ -389,6 +390,7 @@ class CentralizedAggregator(Aggregator):
      All clients get fully synchronized with the average client.
 
     """
+    # TODO
     def mix(self, diverse=True):
         self.sample_clients()
 

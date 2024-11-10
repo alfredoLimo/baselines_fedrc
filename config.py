@@ -1,9 +1,9 @@
 # Overall settings
 k_folds = 5 # number of folds for cross-validation, if 1, no cross-validation
-strategy = 'FeSEM'  # ['fedrc','FedEM','FeSEM','FedAvg']
+strategy = 'FedEM'  # ['fedrc','FedEM','FeSEM','FedAvg']
 random_seed = 42
-n_clients = 10   
-K_model = 2         # TODO, same as ifca
+n_clients = 5   
+K_model = 2        # TODO, same as ifca
 gpu = -1 # -1 for default best choice, [0,3] for cuda device
 
 # Dataset settings
@@ -17,8 +17,8 @@ plot_clients = False
 args = {
     'set_rotation': True,
     'set_color': True,
-    'rotations':1,
-    'colors':1,
+    'rotations':3,
+    'colors':2,
     # 'py_bank': 5,
     # 'client_n_class': 5,
     # 'scaling_rotation_low':0.0,
@@ -34,7 +34,7 @@ model_name = "LeNet5"  # DEFAULT LeNet5 # ["LeNet5", "ResNet9"]
 batch_size = 64
 test_batch_size = 64
 client_eval_ratio = 0.2
-n_rounds = 5  # you need at least 4 rounds to start clustering
+n_rounds = 3  # you need at least 4 rounds to start clustering
 local_epochs = 2
 lr = 0.005
 momentum = 0.9

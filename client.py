@@ -4,7 +4,7 @@ from copy import deepcopy
 from utils.torch_utils import *
 from math import log
 
-
+import config as cfg
 
 class Client(object):
     r"""Implements one clients
@@ -263,7 +263,17 @@ class Client(object):
 
         return client_updates
 
-    def write_logs(self):
+    # TODO
+    def write_logs(self, cur_round=0):
+        print(f"Round {cur_round} testing")
+
+        if cur_round == 0:
+            print("Not trained yet..")
+
+        # If last round, change weights here to save three types of results
+        if cur_round == cfg.n_rounds:
+            print("TODO Last round, change weights here to save three types of results")
+            pass
 
         if self.tune_locally:
             self.update_tuned_learners()
@@ -274,6 +284,7 @@ class Client(object):
             train_loss, train_acc = self.global_learners_ensemble.evaluate_iterator(self.val_iterator)
             test_loss, test_acc = self.global_learners_ensemble.evaluate_iterator(self.test_iterator)
         else:
+            print("flag")
             train_loss, train_acc = self.learners_ensemble.evaluate_iterator(self.val_iterator)
             test_loss, test_acc = self.learners_ensemble.evaluate_iterator(self.test_iterator)
             # print(train_loss, train_acc, test_loss, test_acc)
@@ -324,6 +335,8 @@ class MixtureClient(Client):
         self.learners_ensemble.learners_weights = self.samples_weights.mean(dim=1)
         weights = self.learners_ensemble.learners_weights
         self.cluster = weights
+        # TODO
+        print(f"FEDEM weights: {weights}")
 
 
 class MixtureClient_SW(Client):
@@ -408,6 +421,8 @@ class FedRC(Client):
         weights = self.learners_ensemble.learners_weights
         # self.learners_ensemble.learners_weights = (self.learners_ensemble.learners_weights == max(self.learners_ensemble.learners_weights)).float()
         self.cluster = weights
+        # TODO
+        print(f"RC weights: {weights}")
         self.update_learner_labels_weights()
 
 
@@ -627,6 +642,8 @@ class FeSEM(Client):
         self.learners_ensemble.learners_weights = self.samples_weights.mean(dim=1)
         weights = self.learners_ensemble.learners_weights
         self.cluster = weights
+        # TODO
+        print(f"FESEM weights: {weights}")
 
 class FedSoft(Client):
 
