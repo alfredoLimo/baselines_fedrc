@@ -379,10 +379,7 @@ if __name__ == "__main__":
     args.local_steps = config.local_epochs
     args.device = torch.device("cpu")
     args.lr = config.lr
-    args.seed = config.random_seed
-    
-    print(f"USING METHOD: {args.method}")
-    
+    args.seed = config.random_seed + args.fold    
     
     if config.gpu == -1:
         if torch.backends.mps.is_available() and torch.backends.mps.is_built():
