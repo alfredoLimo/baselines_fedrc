@@ -36,7 +36,13 @@ def get_ANDA_loaders():
 
         val_features = torch.cat([torch.tensor(val_features), torch.tensor(val_features), torch.tensor(val_features), torch.tensor(val_features)], dim=0)
         val_labels = torch.cat([torch.tensor(val_labels), torch.tensor(val_labels), torch.tensor(val_labels), torch.tensor(val_labels)], dim=0)
-        # print(f"shape of val_features: {val_features.shape}")
+        
+        # reduce client data
+        if cfg.n_samples_clients > 0:
+            train_features = train_features[:cfg.n_samples_clients]
+            train_labels = train_labels[:cfg.n_samples_clients]
+            val_features = val_features[:cfg.n_samples_clients]
+            val_labels = val_labels[:cfg.n_samples_clients]
 
         train_data = ClientDataset(train_features, train_labels)
         val_data = ClientDataset(val_features, val_labels)

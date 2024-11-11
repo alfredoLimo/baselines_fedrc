@@ -6,6 +6,7 @@ n_clients = 3
 K_model = 2        # TODO, same as ifca
 gpu = -1 # -1 for default best choice, [0,3] for cuda device
 name_gpu = 0 # set the number  of the gpu to be used
+n_samples_clients = -1 # -1 for all samples, otherwise set the number of samples per client
 
 # Dataset settings
 dataset_name = "MNIST" # ["CIFAR10", "CIFAR100", "MNIST", "FMNIST", "EMNIST"]
