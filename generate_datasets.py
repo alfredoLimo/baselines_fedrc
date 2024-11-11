@@ -151,7 +151,7 @@ if cfg.drifting_type == 'static':
         count_labels=cfg.count_labels,
         plot_clients=cfg.plot_clients,
         random_seed = cfg.random_seed + args.fold,
-        **cfg.args
+        **cur_args
     )
 elif cfg.drifting_type in ['trND_teDR','trDA_teDR','trDA_teND','trDR_teDR','trDR_teND']:
     # dynamic mode using same fn
@@ -164,7 +164,7 @@ elif cfg.drifting_type in ['trND_teDR','trDA_teDR','trDA_teND','trDR_teDR','trDR
         count_labels=cfg.count_labels,
         plot_clients=cfg.plot_clients,
         random_seed = cfg.random_seed + args.fold,
-        **cfg.args
+        **cur_args
     )
 else:
     raise ValueError("Drifting type not found! Please check the ANDA page for more details.")

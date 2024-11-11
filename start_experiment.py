@@ -372,7 +372,7 @@ if __name__ == "__main__":
 
     # update the real values from config.py
     args.experiment = 'cifar10-c'   # DO NOT CHANGE
-    args.method = config.strategy           
+    # args.method = config.strategy           
     args.n_learners = config.K_model
     args.n_rounds = config.n_rounds
     args.bz = config.batch_size
@@ -380,6 +380,8 @@ if __name__ == "__main__":
     args.device = torch.device("cpu")
     args.lr = config.lr
     args.seed = config.random_seed
+    
+    print(f"USING METHOD: {args.method}")
     
     
     if config.gpu == -1:

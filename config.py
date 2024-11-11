@@ -1,9 +1,9 @@
 # Overall settings
 k_folds = 2 # number of folds for cross-validation, if 1, no cross-validation
-strategy = 'FedEM'  # ['fedrc','FedEM','FeSEM','FedAvg']
+strategy = 'fedrc'  # ['fedrc','FedEM','FeSEM','FedAvg']
 random_seed = 42
-n_clients = 3   
-K_model = 2        # TODO, same as ifca
+n_clients = 10   
+K_model = 5        # TODO, same as ifca
 gpu = -1 # -1 for default best choice, [0,3] for cuda device
 name_gpu = 0 # set the number  of the gpu to be used
 n_samples_clients = -1 # -1 for all samples, otherwise set the number of samples per client
@@ -36,7 +36,7 @@ model_name = "LeNet5"  # DEFAULT LeNet5 # ["LeNet5", "ResNet9"]
 batch_size = 64
 test_batch_size = 64
 client_eval_ratio = 0.2
-n_rounds = 2  # you need at least 4 rounds to start clustering
+n_rounds = 10  # you need at least 4 rounds to start clustering
 local_epochs = 2
 lr = 0.005
 momentum = 0.9
