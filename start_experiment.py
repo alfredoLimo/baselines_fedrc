@@ -373,7 +373,7 @@ if __name__ == "__main__":
     # update the real values from config.py
     args.experiment = 'cifar10-c'   # DO NOT CHANGE
     # args.method = config.strategy           
-    args.n_learners = config.K_model
+    args.n_learners = np.load(f'./data/cur_datasets/n_clusters.npy').item()
     args.n_rounds = config.n_rounds
     args.bz = config.batch_size
     args.local_steps = config.local_epochs
