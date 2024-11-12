@@ -44,7 +44,7 @@ def get_ANDA_loaders():
             val_features = val_features[:cfg.n_samples_clients]
             val_labels = val_labels[:cfg.n_samples_clients]
             
-        if cfg.non_iid_type in ['feature_condition_skew','label_skew_strict']:
+        if cfg.non_iid_type in ['feature_condition_skew','label_skew_strict','feature_condition_skew_strict']:
             train_features = train_features.unsqueeze(1)
             val_features = val_features.unsqueeze(1)
             test_features = test_features.unsqueeze(1)

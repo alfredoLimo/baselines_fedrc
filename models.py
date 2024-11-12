@@ -488,7 +488,7 @@ class LeNet5(nn.Module):
         super(LeNet5, self).__init__()
         self.num_classes = num_classes
         
-        if cfg.non_iid_type in ['feature_condition_skew','label_skew_strict']:
+        if cfg.non_iid_type in ['feature_condition_skew','label_skew_strict','feature_condition_skew_strict']:
             in_channels = 1
 
         self.conv1 = nn.Conv2d(in_channels, 6, kernel_size=5, stride=1, padding=2)  # Convolutional layer with 6 feature maps of size 5x5
