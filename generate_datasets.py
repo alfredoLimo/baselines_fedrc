@@ -76,7 +76,7 @@ elif cfg.non_iid_type == 'feature_condition_skew':
     # cur_scaling = args.scaling /10
     cur_args = {
         'random_mode':True,
-        'mixing_label_number':args.scaling,
+        'mixing_label_number':args.scaling+2,
         'scaling_label_low':1,
         'scaling_label_high':1,
     }

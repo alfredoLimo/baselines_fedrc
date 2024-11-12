@@ -490,6 +490,25 @@ class IFCAAggregator(CentralizedAggregator):
         # assign the updated model to all clients
         self.update_clients()
 
+        # take clients HERE
+        self.sample_clients()
+        nn = 0
+        cluster_list = []
+        for client in self.sampled_clients:
+            cluster_list.append(client.cluster)
+            nn += 1
+        
+        # cat
+        cluster_list = torch.stack(cluster_list)
+        print('cluster_list: ' + str(cluster_list))
+        # sum and normalize
+        sum_cluster = cluster_list.sum(dim=0)
+        average_cluster = sum_cluster / sum_cluster.sum()
+        print('average_cluster: ' + str(average_cluster))
+        # save torch
+        # np.save('average_cluster.npy', cluster_list.numpy())
+        torch.save(average_cluster, 'average_cluster.pt')
+
         self.c_round += 1
 
         if self.c_round % self.log_freq == 0:

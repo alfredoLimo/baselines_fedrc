@@ -8,6 +8,7 @@ from torch import nn
 from torch.autograd import Variable
 import pickle
 from sklearn.decomposition import PCA
+import config as cfg
 
 
 class LinearLayer(nn.Module):
@@ -486,6 +487,9 @@ class LeNet5(nn.Module):
     def __init__(self, in_channels=3, num_classes=10, input_size=(28, 28)):
         super(LeNet5, self).__init__()
         self.num_classes = num_classes
+        
+        if cfg.non_iid_type in ['feature_condition_skew','label_skew_strict']:
+            in_channels = 1
 
         self.conv1 = nn.Conv2d(in_channels, 6, kernel_size=5, stride=1, padding=2)  # Convolutional layer with 6 feature maps of size 5x5
         self.pool1 = nn.AvgPool2d(kernel_size=2, stride=2)  # Subsampling layer with 6 feature maps of size 2x2

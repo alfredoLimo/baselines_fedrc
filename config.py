@@ -1,9 +1,9 @@
 # Overall settings
-k_folds = 2 # number of folds for cross-validation, if 1, no cross-validation
+k_folds = 5 # number of folds for cross-validation, if 1, no cross-validation
 strategy = 'fedrc'  # ['fedrc','FedEM','FeSEM','FedAvg']
 random_seed = 42
 n_clients = 10   
-K_model = 5        # TODO, same as ifca
+K_model = 10        # TODO, same as ifca
 gpu = -1 # -1 for default best choice, [0,3] for cuda device
 name_gpu = 0 # set the number  of the gpu to be used
 n_samples_clients = -1 # -1 for all samples, otherwise set the number of samples per client
@@ -17,10 +17,10 @@ count_labels = True
 plot_clients = False
 # careful with the args applying to your settings above
 args = {
-    'set_rotation': True,
-    'set_color': True,
-    'rotations':3,
-    'colors':2,
+    # 'set_rotation': True,
+    # 'set_color': True,
+    # 'rotations':3,
+    # 'colors':2,
     # 'py_bank': 5,
     # 'client_n_class': 5,
     # 'scaling_rotation_low':0.0,
