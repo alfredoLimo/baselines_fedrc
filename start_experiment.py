@@ -18,6 +18,7 @@ from anda_dataloader import get_ANDA_loaders
 from torch.utils.tensorboard import SummaryWriter
 
 import config
+import time
 
 def init_clients(args_, root_path, logs_dir):
     """
@@ -331,7 +332,7 @@ def run_experiment(args_):
         os.makedirs(save_dir, exist_ok=True)
         aggregator.save_state(save_dir)
 
-def mean_results(n_clients, fold):
+def mean_results(n_clients, fold, time_tot):
     x = []
     for i in range(n_clients):
         x.append(np.load(f"results_{i}.npy"))
@@ -360,6 +361,7 @@ def mean_results(n_clients, fold):
         "accuracy_cluster": list(x[:,5]),
         "average_loss_cluster": np.mean(x[:,4]),
         "average_accuracy_cluster": np.mean(x[:,5]), 
+        "time": time_tot
     }
     np.save(f'test_metrics_fold_{fold}.npy', metrics)
 
@@ -391,7 +393,9 @@ if __name__ == "__main__":
 
     print(f"USING DEVICE: {args.device}")
 
+    time_start = time.time()    
     run_experiment(args)
+    time_tot = time.time() - time_start
     
     # average results from all clients
-    mean_results(config.n_clients, args.fold)
+    mean_results(config.n_clients, args.fold, time_tot)

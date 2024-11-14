@@ -4,7 +4,7 @@ import numpy as np
 k_folds = 2 # number of folds for cross-validation, if 1, no cross-validation
 strategy = 'fedrc'  # ['fedrc','FedEM','FeSEM','FedAvg']
 random_seed = 42
-n_clients = 5  
+n_clients = 3  
 # read np
 # K_model = np.load(f'./data/cur_datasets/n_clusters.npy').item()
 # print(K_model)
